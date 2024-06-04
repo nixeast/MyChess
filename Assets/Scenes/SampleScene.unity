@@ -344,7 +344,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db5162f402cda474cb582b62e46948d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgGameBoardTilePrefab: {fileID: 8212109242783430210, guid: e866d8e042e86409593c16a491bb39c6, type: 3}
+  imgGameBoardTilePrefab_white: {fileID: 8212109242783430210, guid: e866d8e042e86409593c16a491bb39c6, type: 3}
+  imgGameBoardTilePrefab_black: {fileID: 8212109242783430210, guid: aa01472af78a54f8b95ba8bd3a97ce09, type: 3}
   CurrentCanvas: {fileID: 1163105670}
 --- !u!4 &1470832011
 Transform:
