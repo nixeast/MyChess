@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,10 +8,14 @@ public class GameManager : MonoBehaviour
 {
     public GameObject imgGameBoardTilePrefab_white;
     public GameObject imgGameBoardTilePrefab_black;
+    public GameObject ChessPiecePrefab;
 
     public Canvas CurrentCanvas;
 
+    public Sprite[] arPieceSprite = new Sprite[12];
+
     GameObject[] chessBoardTile = new GameObject[64];
+    GameObject[] chessPiece = new GameObject[32];
 
 
     // Start is called before the first frame update
@@ -32,13 +37,13 @@ public class GameManager : MonoBehaviour
         */
 
         CreateMap();
-
+        CreateChessPieces();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void CreateMap()
@@ -65,7 +70,7 @@ public class GameManager : MonoBehaviour
                 {
                     chessBoardTile[nIndexNumber] = Instantiate(imgGameBoardTilePrefab_white);
                 }
-                else if(nSumTileXY % 2 == 1)
+                else if (nSumTileXY % 2 == 1)
                 {
                     chessBoardTile[nIndexNumber] = Instantiate(imgGameBoardTilePrefab_black);
                 }
@@ -85,6 +90,152 @@ public class GameManager : MonoBehaviour
 
             nRowCount++;
 
+        }
+    }
+
+    void CreateChessPieces()
+    {
+        int nTileNumber = 0;
+        int nPieceNumber = 0;
+
+        while (nTileNumber < 64)
+        {
+            if (nTileNumber < 16 || nTileNumber >= 48)
+            {
+                Vector3 posCurrentPiece = Vector3.zero;
+                chessPiece[nPieceNumber] = Instantiate(ChessPiecePrefab);
+                chessPiece[nPieceNumber].transform.SetParent(CurrentCanvas.transform);
+
+
+                posCurrentPiece = chessBoardTile[nTileNumber].GetComponent<RectTransform>().localPosition;
+                chessPiece[nPieceNumber].GetComponent<RectTransform>().localPosition = posCurrentPiece;
+
+
+                nPieceNumber++;
+            }
+
+            nTileNumber++;
+        }
+
+        nPieceNumber = 0;
+        while (nPieceNumber < 32)
+        {
+
+            if (nPieceNumber < 16)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().nOwnPlayerNumber = 1;
+            }
+            else if (nPieceNumber >= 16)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().nOwnPlayerNumber = 2;
+            }
+
+            nPieceNumber++;
+        }
+
+        nPieceNumber = 0;
+        while (nPieceNumber < 32)
+        {
+
+            if (nPieceNumber == 3 || nPieceNumber == 27)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType = ChessPiece.MyPieceTypes.King;
+            }
+
+            else if (nPieceNumber == 4 || nPieceNumber == 28)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType = ChessPiece.MyPieceTypes.Queen;
+            }
+
+            else if (nPieceNumber == 2 || nPieceNumber == 5 || nPieceNumber == 26 || nPieceNumber == 29)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType = ChessPiece.MyPieceTypes.Bishop;
+            }
+
+            else if (nPieceNumber == 1 || nPieceNumber == 6 || nPieceNumber == 25 || nPieceNumber == 30)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType = ChessPiece.MyPieceTypes.Knight;
+            }
+
+            else if (nPieceNumber == 0 || nPieceNumber == 7 || nPieceNumber == 24 || nPieceNumber == 31)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType = ChessPiece.MyPieceTypes.Rook;
+            }
+
+            else if (nPieceNumber >= 8 && nPieceNumber < 24)
+            {
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType = ChessPiece.MyPieceTypes.Pawn;
+                chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[11];
+            }
+
+            nPieceNumber++;
+        }
+
+        nPieceNumber = 0;
+        while (nPieceNumber < 32)
+        {
+            int nCurrentPiecePlayerNumber = 0;
+            ChessPiece.MyPieceTypes CurrentPieceType = 0;
+
+            nCurrentPiecePlayerNumber = chessPiece[nPieceNumber].GetComponent<ChessPiece>().nOwnPlayerNumber;
+            CurrentPieceType = chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType;
+
+            if(nCurrentPiecePlayerNumber == 1)
+            {
+                if(CurrentPieceType == ChessPiece.MyPieceTypes.King)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[0];
+                }
+                else if(CurrentPieceType == ChessPiece.MyPieceTypes.Queen)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[1];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Bishop)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[2];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Knight)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[3];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Rook)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[4];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Pawn)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[5];
+                }
+            }
+            else if(nCurrentPiecePlayerNumber == 2)
+            {
+                if (CurrentPieceType == ChessPiece.MyPieceTypes.King)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[6];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Queen)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[7];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Bishop)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[8];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Knight)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[9];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Rook)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[10];
+                }
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Pawn)
+                {
+                    chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[11];
+                }
+            }
+
+            nPieceNumber++;
         }
     }
 }

@@ -346,7 +346,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imgGameBoardTilePrefab_white: {fileID: 8212109242783430210, guid: e866d8e042e86409593c16a491bb39c6, type: 3}
   imgGameBoardTilePrefab_black: {fileID: 8212109242783430210, guid: aa01472af78a54f8b95ba8bd3a97ce09, type: 3}
+  ChessPiecePrefab: {fileID: 1672502986714307068, guid: 7216fe4405bafb147b985922d0f5575b, type: 3}
   CurrentCanvas: {fileID: 1163105670}
+  arPieceSprite:
+  - {fileID: 1189643307, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: -145378228, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: -655608415, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: 1882152418, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: 380846997, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: 1575250761, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: 1385106274, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: 418243020, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: -216528472, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: -34712772, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: 1250000034, guid: dd78cc74532b7184e877525d11569407, type: 3}
+  - {fileID: -1642652858, guid: dd78cc74532b7184e877525d11569407, type: 3}
 --- !u!4 &1470832011
 Transform:
   m_ObjectHideFlags: 0
