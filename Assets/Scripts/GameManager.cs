@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject imgGameBoardTilePrefab_white;
     public GameObject imgGameBoardTilePrefab_black;
     public GameObject ChessPiecePrefab;
+    public GameObject CurrentSelectedPiece;
+    public GameObject chessPieceMovablePointPrefab;
 
     public Canvas CurrentCanvas;
 
@@ -16,6 +18,10 @@ public class GameManager : MonoBehaviour
 
     GameObject[] chessBoardTile = new GameObject[64];
     GameObject[] chessPiece = new GameObject[32];
+    GameObject currentPieceMovablePoint;
+
+    float fPosXCorrection = -175.0f;
+    float fPosYCorrection = -175.0f;
 
 
     // Start is called before the first frame update
@@ -55,8 +61,7 @@ public class GameManager : MonoBehaviour
         float nTileInterval = 50.0f;
         int nSumTileXY = 0;
 
-        float fPosXCorrection = -175.0f;
-        float fPosYCorrection = -175.0f;
+        
 
         for (int i = 0; i < 8; i++)
         {
@@ -109,6 +114,8 @@ public class GameManager : MonoBehaviour
 
                 posCurrentPiece = chessBoardTile[nTileNumber].GetComponent<RectTransform>().localPosition;
                 chessPiece[nPieceNumber].GetComponent<RectTransform>().localPosition = posCurrentPiece;
+
+                chessPiece[nPieceNumber].GetComponent<ChessPiece>().nCurrentTileNumber = nTileNumber;
 
 
                 nPieceNumber++;
@@ -238,4 +245,23 @@ public class GameManager : MonoBehaviour
             nPieceNumber++;
         }
     }
+
+    public void ShowCurrentPieceMoveRange()
+    {
+        Vector3 posParentPosition = Vector3.zero;
+        Vector3 targetPosition = Vector3.zero;
+        int nTargetTileNumber = 0;
+        //chessBoardTile[nTargetTileNumber].transform;
+
+        currentPieceMovablePoint = Instantiate(chessPieceMovablePointPrefab);
+        
+        nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + 8;
+        currentPieceMovablePoint.transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+
+        currentPieceMovablePoint.GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        
+
+    }
+
 }

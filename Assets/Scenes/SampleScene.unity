@@ -347,6 +347,8 @@ MonoBehaviour:
   imgGameBoardTilePrefab_white: {fileID: 8212109242783430210, guid: e866d8e042e86409593c16a491bb39c6, type: 3}
   imgGameBoardTilePrefab_black: {fileID: 8212109242783430210, guid: aa01472af78a54f8b95ba8bd3a97ce09, type: 3}
   ChessPiecePrefab: {fileID: 1672502986714307068, guid: 7216fe4405bafb147b985922d0f5575b, type: 3}
+  CurrentSelectedPiece: {fileID: 0}
+  chessPieceMovablePointPrefab: {fileID: 8758676439370535012, guid: cef0ec6e5278eab49b5b1bf0d18ad370, type: 3}
   CurrentCanvas: {fileID: 1163105670}
   arPieceSprite:
   - {fileID: 1189643307, guid: dd78cc74532b7184e877525d11569407, type: 3}
