@@ -263,6 +263,86 @@ public class GameManager : MonoBehaviour
 
             currentPieceMovablePoint.GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(currentPieceMovablePoint));
         }
+        else if(pieceType == ChessPiece.MyPieceTypes.Rook)
+        {
+            int ThisPieceTileNumber = 0;
+            int nCountUp = 0;
+            int nCountUpStartNumber = 0;
+            int nCountLeft = 0;
+            int nCountLeftStartNumber = 0;
+            int nRemainderDividedByEight = 0;
+            int nCountDown = 0;
+            int nCountDownStartNumber = 0;
+            int nCountRight = 0;
+            int nCountRightStartNumber = 0;
+            int nUpInterval = 8;
+            int nDownInterval = -8;
+            //int nLeftInterval = -1;
+            //int nRightInterval = 1;
+
+            ThisPieceTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber;
+            nCountUpStartNumber = ThisPieceTileNumber + nUpInterval;
+
+            while(nCountUpStartNumber < 64)
+            {
+                nCountUp++;
+                nCountUpStartNumber += nUpInterval;
+            }
+
+            Debug.Log("Up direction count : " + nCountUp);
+
+            GameObject[] UpSideMovablePoint = new GameObject[nCountUp];
+
+            for (int i = 0; i < nCountUp; i++)
+            {
+                UpSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+                nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
+                UpSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+                UpSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+                UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(UpSideMovablePoint[i]));
+            }
+
+            nCountDownStartNumber = ThisPieceTileNumber + nDownInterval;
+            while(nCountDownStartNumber >= 0)
+            {
+                nCountDown++;
+                nCountDownStartNumber += nDownInterval;
+            }
+            Debug.Log("Down direction count : " + nCountDown);
+
+            GameObject[] DownSideMovablePoint = new GameObject[nCountDown];
+
+            for (int i = 0; i < nCountDown; i++)
+            {
+                DownSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+                nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nDownInterval * i) + nDownInterval;
+                DownSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+                DownSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+                DownSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(DownSideMovablePoint[i]));
+            }
+
+            nRemainderDividedByEight = ThisPieceTileNumber % 8;
+
+            nCountLeftStartNumber = nRemainderDividedByEight - 1;
+            while(nCountLeftStartNumber >= 0)
+            {
+                nCountLeft++;
+                nCountLeftStartNumber--;
+            }
+            Debug.Log("Left direction count : " + nCountLeft);
+
+
+            nCountRightStartNumber = nRemainderDividedByEight + 1;
+            while(nCountRightStartNumber < 8)
+            {
+                nCountRight++;
+                nCountRightStartNumber++;
+            }
+            Debug.Log("Right direction count : " + nCountRight);
+
+
+        }
+
 
 
     }
@@ -273,6 +353,7 @@ public class GameManager : MonoBehaviour
         Destroy(currentPieceMovablePoint);
         CurrentSelectedPiece = null;
     }
+
     public void MovePieceToPoint(GameObject pointGameObject)
     {
         int nCurrentPointTileNumber;
