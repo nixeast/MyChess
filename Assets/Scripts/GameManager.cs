@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     GameObject[] chessBoardTile = new GameObject[64];
     GameObject[] chessPiece = new GameObject[32];
     GameObject currentPieceMovablePoint;
+    List<GameObject> createdMovablePoint = new List<GameObject>();
 
     float fPosXCorrection = -175.0f;
     float fPosYCorrection = -175.0f;
@@ -295,11 +296,15 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i < nCountUp; i++)
             {
+
                 UpSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+                createdMovablePoint.Add(UpSideMovablePoint[i]);
+
                 nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
                 UpSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
                 UpSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
-                UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(UpSideMovablePoint[i]));
+                //UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(UpSideMovablePoint[i]));
+                UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => DestroyCurrentPieceMoveRange());
             }
 
             nCountDownStartNumber = ThisPieceTileNumber + nDownInterval;
@@ -349,8 +354,24 @@ public class GameManager : MonoBehaviour
 
     public void DestroyCurrentPieceMoveRange()
     {
+        
         CurrentSelectedPiece.GetComponent<ChessPiece>().ChangePieceColorTransparency(false);
-        Destroy(currentPieceMovablePoint);
+
+        if (currentPieceMovablePoint != null)
+        {
+            Destroy(currentPieceMovablePoint);
+        }
+
+        if (createdMovablePoint.Capacity > 0)
+        {
+            for (int i = 0; i < createdMovablePoint.Count; i++)
+            {
+                Destroy(createdMovablePoint[i]);
+            }
+            createdMovablePoint.Clear();
+            Debug.Log("Movable points are cleared and destroyed..");
+        }
+
         CurrentSelectedPiece = null;
     }
 
