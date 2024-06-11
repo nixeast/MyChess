@@ -19,10 +19,12 @@ public class GameManager : MonoBehaviour
     GameObject[] chessBoardTile = new GameObject[64];
     GameObject[] chessPiece = new GameObject[32];
     GameObject currentPieceMovablePoint;
-    List<GameObject> createdMovablePoint = new List<GameObject>();
+    public List<GameObject> createdMovablePoint = new List<GameObject>();
 
     float fPosXCorrection = -175.0f;
     float fPosYCorrection = -175.0f;
+
+    //GameObject[] UpSideMovablePoint;
 
 
     // Start is called before the first frame update
@@ -293,6 +295,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Up direction count : " + nCountUp);
 
             GameObject[] UpSideMovablePoint = new GameObject[nCountUp];
+            UpSideMovablePoint = new GameObject[nCountUp];
 
             for (int i = 0; i < nCountUp; i++)
             {
@@ -303,8 +306,9 @@ public class GameManager : MonoBehaviour
                 nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
                 UpSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
                 UpSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
                 //UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(UpSideMovablePoint[i]));
-                UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => DestroyCurrentPieceMoveRange());
+                //UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => DestroyCurrentPieceMoveRange());
             }
 
             nCountDownStartNumber = ThisPieceTileNumber + nDownInterval;
@@ -320,10 +324,13 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < nCountDown; i++)
             {
                 DownSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+                createdMovablePoint.Add(DownSideMovablePoint[i]);
+
                 nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nDownInterval * i) + nDownInterval;
                 DownSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
                 DownSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
-                DownSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(DownSideMovablePoint[i]));
+
+                //DownSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(DownSideMovablePoint[i]));
             }
 
             nRemainderDividedByEight = ThisPieceTileNumber % 8;
@@ -377,19 +384,31 @@ public class GameManager : MonoBehaviour
 
     public void MovePieceToPoint(GameObject pointGameObject)
     {
-        int nCurrentPointTileNumber;
+        if (pointGameObject == null)
+        {
+            Debug.Log("null ptr..");
+        }
+        else if (pointGameObject != null)
+        {
+            Debug.Log("pointGameObject exist..");
 
-        Vector3 testPos = pointGameObject.GetComponent<RectTransform>().localPosition;
-        nCurrentPointTileNumber = pointGameObject.GetComponentInParent<BoardTile>().nMyTileNmber;
-        Debug.Log("nCurrentPointTileNumber : " + nCurrentPointTileNumber);
+            int nCurrentPointTileNumber;
 
-        CurrentSelectedPiece.GetComponent<RectTransform>().localPosition = chessBoardTile[nCurrentPointTileNumber].GetComponent<RectTransform>().localPosition;
-        CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber = nCurrentPointTileNumber;
-        DestroyCurrentPieceMoveRange();
+            Vector3 testPos = pointGameObject.GetComponent<RectTransform>().localPosition;
+            nCurrentPointTileNumber = pointGameObject.GetComponentInParent<BoardTile>().nMyTileNmber;
+            Debug.Log("nCurrentPointTileNumber : " + nCurrentPointTileNumber);
+
+            CurrentSelectedPiece.GetComponent<RectTransform>().localPosition = chessBoardTile[nCurrentPointTileNumber].GetComponent<RectTransform>().localPosition;
+            CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber = nCurrentPointTileNumber;
+            DestroyCurrentPieceMoveRange();
+
+        }
+
     }
 
     void TestFunc()
     {
         Debug.Log("this is AddListener test");
     }
+    
 }
