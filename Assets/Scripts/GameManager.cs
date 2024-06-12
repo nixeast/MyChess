@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     GameObject[] chessBoardTile = new GameObject[64];
     GameObject[] chessPiece = new GameObject[32];
-    GameObject currentPieceMovablePoint;
+    //GameObject currentPieceMovablePoint;
     public List<GameObject> createdMovablePoint = new List<GameObject>();
 
     float fPosXCorrection = -175.0f;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         float nTileInterval = 50.0f;
         int nSumTileXY = 0;
 
-        
+
 
         for (int i = 0; i < 8; i++)
         {
@@ -190,13 +190,13 @@ public class GameManager : MonoBehaviour
             nCurrentPiecePlayerNumber = chessPiece[nPieceNumber].GetComponent<ChessPiece>().nOwnPlayerNumber;
             CurrentPieceType = chessPiece[nPieceNumber].GetComponent<ChessPiece>().currentPieceType;
 
-            if(nCurrentPiecePlayerNumber == 1)
+            if (nCurrentPiecePlayerNumber == 1)
             {
-                if(CurrentPieceType == ChessPiece.MyPieceTypes.King)
+                if (CurrentPieceType == ChessPiece.MyPieceTypes.King)
                 {
                     chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[0];
                 }
-                else if(CurrentPieceType == ChessPiece.MyPieceTypes.Queen)
+                else if (CurrentPieceType == ChessPiece.MyPieceTypes.Queen)
                 {
                     chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[1];
                 }
@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
                     chessPiece[nPieceNumber].GetComponent<Image>().sprite = arPieceSprite[5];
                 }
             }
-            else if(nCurrentPiecePlayerNumber == 2)
+            else if (nCurrentPiecePlayerNumber == 2)
             {
                 if (CurrentPieceType == ChessPiece.MyPieceTypes.King)
                 {
@@ -255,103 +255,40 @@ public class GameManager : MonoBehaviour
         Vector3 targetPosition = Vector3.zero;
         int nTargetTileNumber = 0;
 
-        if(pieceType == ChessPiece.MyPieceTypes.Pawn)
+        if (pieceType == ChessPiece.MyPieceTypes.Pawn)
         {
-            currentPieceMovablePoint = Instantiate(chessPieceMovablePointPrefab);
-        
-            nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + 8;
-            currentPieceMovablePoint.transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
 
-            currentPieceMovablePoint.GetComponent<RectTransform>().localPosition = posParentPosition;
+            MakeMovePoint_Pawn(nTargetTileNumber, posParentPosition);
 
-            currentPieceMovablePoint.GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(currentPieceMovablePoint));
         }
-        else if(pieceType == ChessPiece.MyPieceTypes.Rook)
+        else if (pieceType == ChessPiece.MyPieceTypes.Rook)
         {
-            int ThisPieceTileNumber = 0;
-            int nCountUp = 0;
-            int nCountUpStartNumber = 0;
-            int nCountLeft = 0;
-            int nCountLeftStartNumber = 0;
-            int nRemainderDividedByEight = 0;
-            int nCountDown = 0;
-            int nCountDownStartNumber = 0;
-            int nCountRight = 0;
-            int nCountRightStartNumber = 0;
-            int nUpInterval = 8;
-            int nDownInterval = -8;
-            //int nLeftInterval = -1;
-            //int nRightInterval = 1;
 
-            ThisPieceTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber;
-            nCountUpStartNumber = ThisPieceTileNumber + nUpInterval;
+            MakeMovePoint_Rook(nTargetTileNumber, posParentPosition);
 
-            while(nCountUpStartNumber < 64)
-            {
-                nCountUp++;
-                nCountUpStartNumber += nUpInterval;
-            }
+        }
+        else if (pieceType == ChessPiece.MyPieceTypes.Knight)
+        {
 
-            Debug.Log("Up direction count : " + nCountUp);
+            //MakeMovePoint_Rook(nTargetTileNumber, posParentPosition);
 
-            GameObject[] UpSideMovablePoint = new GameObject[nCountUp];
-            UpSideMovablePoint = new GameObject[nCountUp];
+        }
+        else if (pieceType == ChessPiece.MyPieceTypes.Bishop)
+        {
 
-            for (int i = 0; i < nCountUp; i++)
-            {
+            //MakeMovePoint_Rook(nTargetTileNumber, posParentPosition);
 
-                UpSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
-                createdMovablePoint.Add(UpSideMovablePoint[i]);
+        }
+        else if (pieceType == ChessPiece.MyPieceTypes.Queen)
+        {
 
-                nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
-                UpSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
-                UpSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+            //MakeMovePoint_Rook(nTargetTileNumber, posParentPosition);
 
-                //UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(UpSideMovablePoint[i]));
-                //UpSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => DestroyCurrentPieceMoveRange());
-            }
+        }
+        else if (pieceType == ChessPiece.MyPieceTypes.King)
+        {
 
-            nCountDownStartNumber = ThisPieceTileNumber + nDownInterval;
-            while(nCountDownStartNumber >= 0)
-            {
-                nCountDown++;
-                nCountDownStartNumber += nDownInterval;
-            }
-            Debug.Log("Down direction count : " + nCountDown);
-
-            GameObject[] DownSideMovablePoint = new GameObject[nCountDown];
-
-            for (int i = 0; i < nCountDown; i++)
-            {
-                DownSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
-                createdMovablePoint.Add(DownSideMovablePoint[i]);
-
-                nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nDownInterval * i) + nDownInterval;
-                DownSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
-                DownSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
-
-                //DownSideMovablePoint[i].GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(DownSideMovablePoint[i]));
-            }
-
-            nRemainderDividedByEight = ThisPieceTileNumber % 8;
-
-            nCountLeftStartNumber = nRemainderDividedByEight - 1;
-            while(nCountLeftStartNumber >= 0)
-            {
-                nCountLeft++;
-                nCountLeftStartNumber--;
-            }
-            Debug.Log("Left direction count : " + nCountLeft);
-
-
-            nCountRightStartNumber = nRemainderDividedByEight + 1;
-            while(nCountRightStartNumber < 8)
-            {
-                nCountRight++;
-                nCountRightStartNumber++;
-            }
-            Debug.Log("Right direction count : " + nCountRight);
-
+            //MakeMovePoint_Rook(nTargetTileNumber, posParentPosition);
 
         }
 
@@ -361,13 +298,13 @@ public class GameManager : MonoBehaviour
 
     public void DestroyCurrentPieceMoveRange()
     {
-        
+
         CurrentSelectedPiece.GetComponent<ChessPiece>().ChangePieceColorTransparency(false);
 
-        if (currentPieceMovablePoint != null)
-        {
-            Destroy(currentPieceMovablePoint);
-        }
+        //if (currentPieceMovablePoint != null)
+        //{
+        //    Destroy(currentPieceMovablePoint);
+        //}
 
         if (createdMovablePoint.Capacity > 0)
         {
@@ -410,5 +347,155 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("this is AddListener test");
     }
-    
+
+    void MakeMovePoint_Pawn(int nTargetTileNumber, Vector3 posParentPosition)
+    {
+        int nCountUp = 1;
+        int nUpInterval = 8;
+        GameObject[] UpSideMovablePoint = new GameObject[nCountUp];
+
+        for (int i = 0; i < nCountUp; i++)
+        {
+
+            UpSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+            createdMovablePoint.Add(UpSideMovablePoint[i]);
+
+            nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
+            UpSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+            UpSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        }
+
+        //currentPieceMovablePoint = Instantiate(chessPieceMovablePointPrefab);
+
+        //nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + 8;
+        //currentPieceMovablePoint.transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+        //currentPieceMovablePoint.GetComponent<RectTransform>().localPosition = posParentPosition;
+        //currentPieceMovablePoint.GetComponent<Button>().onClick.AddListener(() => MovePieceToPoint(currentPieceMovablePoint));
+    }
+
+    void MakeMovePoint_Rook(int nTargetTileNumber, Vector3 posParentPosition)
+    {
+        int ThisPieceTileNumber = 0;
+        int nCountUp = 0;
+        int nCountUpStartNumber = 0;
+        int nCountLeft = 0;
+        int nCountLeftStartNumber = 0;
+        int nRemainderDividedByEight = 0;
+        int nCountDown = 0;
+        int nCountDownStartNumber = 0;
+        int nCountRight = 0;
+        int nCountRightStartNumber = 0;
+        int nUpInterval = 8;
+        int nDownInterval = -8;
+        int nLeftInterval = -1;
+        int nRightInterval = 1;
+
+        ThisPieceTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber;
+        nCountUpStartNumber = ThisPieceTileNumber + nUpInterval;
+
+        while (nCountUpStartNumber < 64)
+        {
+            nCountUp++;
+            nCountUpStartNumber += nUpInterval;
+        }
+
+        Debug.Log("Up direction count : " + nCountUp);
+
+        GameObject[] UpSideMovablePoint = new GameObject[nCountUp];
+
+        for (int i = 0; i < nCountUp; i++)
+        {
+
+            UpSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+            createdMovablePoint.Add(UpSideMovablePoint[i]);
+
+            nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
+            UpSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+            UpSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        }
+
+        nCountDownStartNumber = ThisPieceTileNumber + nDownInterval;
+        while (nCountDownStartNumber >= 0)
+        {
+            nCountDown++;
+            nCountDownStartNumber += nDownInterval;
+        }
+        Debug.Log("Down direction count : " + nCountDown);
+
+        GameObject[] DownSideMovablePoint = new GameObject[nCountDown];
+        for (int i = 0; i < nCountDown; i++)
+        {
+            DownSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+            createdMovablePoint.Add(DownSideMovablePoint[i]);
+
+            nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nDownInterval * i) + nDownInterval;
+            DownSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+            DownSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        }
+
+        nRemainderDividedByEight = ThisPieceTileNumber % 8;
+        nCountLeftStartNumber = nRemainderDividedByEight - 1;
+        while (nCountLeftStartNumber >= 0)
+        {
+            nCountLeft++;
+            nCountLeftStartNumber--;
+        }
+        Debug.Log("Left direction count : " + nCountLeft);
+
+        GameObject[] LeftSideMovablePoint = new GameObject[nCountLeft];
+        for (int i = 0; i < nCountLeft; i++)
+        {
+            LeftSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+            createdMovablePoint.Add(LeftSideMovablePoint[i]);
+
+            nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nLeftInterval * i) + nLeftInterval;
+            LeftSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+            LeftSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        }
+
+        nCountRightStartNumber = nRemainderDividedByEight + 1;
+        while (nCountRightStartNumber < 8)
+        {
+            nCountRight++;
+            nCountRightStartNumber++;
+        }
+        Debug.Log("Right direction count : " + nCountRight);
+
+        GameObject[] RightSideMovablePoint = new GameObject[nCountRight];
+        for (int i = 0; i < nCountRight; i++)
+        {
+            RightSideMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+            createdMovablePoint.Add(RightSideMovablePoint[i]);
+
+            nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nRightInterval * i) + nRightInterval;
+            RightSideMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+            RightSideMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        }
+    }
+
+    void MakeMovePoint_Knight(int nTargetTileNumber, Vector3 posParentPosition)
+    {
+
+    }
+
+    void MakeMovePoint_Bishop(int nTargetTileNumber, Vector3 posParentPosition)
+    {
+
+    }
+
+    void MakeMovePoint_Queen(int nTargetTileNumber, Vector3 posParentPosition)
+    {
+
+    }
+
+    void MakeMovePoint_King(int nTargetTileNumber, Vector3 posParentPosition)
+    {
+
+    }
+
 }
