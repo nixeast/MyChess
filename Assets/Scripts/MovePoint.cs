@@ -7,6 +7,7 @@ public class MovePoint : MonoBehaviour
 {
     public GameObject CurrentGameManagerObject;
     GameManager CurrentGameManager;
+    bool isMovable = false;
 
     // Start is called before the first frame update
     void Start()
