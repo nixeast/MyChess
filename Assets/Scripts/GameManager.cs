@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour
         else if (pieceType == ChessPiece.MyPieceTypes.Bishop)
         {
 
-            //MakeMovePoint_Rook(nTargetTileNumber, posParentPosition);
+            MakeMovePoint_Bishop(nTargetTileNumber, posParentPosition);
 
         }
         else if (pieceType == ChessPiece.MyPieceTypes.Queen)
@@ -481,28 +481,19 @@ public class GameManager : MonoBehaviour
     void MakeMovePoint_Knight(int nTargetTileNumber, Vector3 posParentPosition)
     {
         int ThisPieceTileNumber = 0;
-        int nCountUp = 0;
         int nCountUpStartNumber = 0;
-        int nCountLeft = 0;
-        int nCountLeftStartNumber = 0;
-        int nRemainderDividedByEight = 0;
-        int nCountDown = 0;
-        int nCountDownStartNumber = 0;
-        int nCountRight = 0;
-        int nCountRightStartNumber = 0;
         int nUpInterval = 16;
         int nDownInterval = -16;
         int nLeftInterval = -2;
         int nRightInterval = 2;
+        int nMaxMovePointCount = 8;
 
-        //int nCountStartNumber = 0;
 
         ThisPieceTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber;
         nCountUpStartNumber = ThisPieceTileNumber;
-        //nCountUpStartNumber += nLeftInterval;
 
-        int[] arFirstStepTargetPosition = new int[2];
-        int[] arSecondStepTargetPosition = new int[2];
+        int[] arFirstStepTargetPosition = new int[nMaxMovePointCount];
+        int[] arSecondStepTargetPosition = new int[nMaxMovePointCount];
 
         int nRightSideLimit = 0;
         nRightSideLimit = ThisPieceTileNumber % 8 + 2;
@@ -518,8 +509,9 @@ public class GameManager : MonoBehaviour
             Debug.Log("nUpSideLimit < 64");
 
             arFirstStepTargetPosition[0] = ThisPieceTileNumber + nUpInterval;
+            int nNextStepPosition = arFirstStepTargetPosition[0] % 8 - 1;
 
-            if (arFirstStepTargetPosition[0] % 8 -1 >= 0)
+            if (nNextStepPosition >= 0)
             {
                 arSecondStepTargetPosition[0] = arFirstStepTargetPosition[0] - 1;
             }
@@ -529,7 +521,8 @@ public class GameManager : MonoBehaviour
             }
 
             arFirstStepTargetPosition[1] = ThisPieceTileNumber + nUpInterval;
-            if (arFirstStepTargetPosition[1] % 8 + 1 < 8)
+            nNextStepPosition = arFirstStepTargetPosition[1] % 8 + 1;
+            if (nNextStepPosition < 8)
             {
                 arSecondStepTargetPosition[1] = arFirstStepTargetPosition[1] + 1;
             }
@@ -544,22 +537,109 @@ public class GameManager : MonoBehaviour
         {
             arSecondStepTargetPosition[0] = -1;
             arSecondStepTargetPosition[1] = -1;
-        }        
-        
+        }
+
+        if (nDownSideLimit >= 0)
+        {
+            Debug.Log("nDownSideLimit >= 0");
+
+            arFirstStepTargetPosition[2] = ThisPieceTileNumber + nDownInterval;
+            int nNextStepPosition = arFirstStepTargetPosition[2] % 8 - 1;
+
+            if (nNextStepPosition >= 0)
+            {
+                arSecondStepTargetPosition[2] = arFirstStepTargetPosition[2] - 1;
+            }
+            else
+            {
+                arSecondStepTargetPosition[2] = -1;
+            }
+
+            arFirstStepTargetPosition[3] = ThisPieceTileNumber + nDownInterval;
+            nNextStepPosition = arFirstStepTargetPosition[3] % 8 + 1;
+            if (nNextStepPosition < 8)
+            {
+                arSecondStepTargetPosition[3] = arFirstStepTargetPosition[3] + 1;
+            }
+            else
+            {
+                arSecondStepTargetPosition[3] = -1;
+            }
 
 
-        //arTargetPosition[0] = ThisPieceTileNumber + nUpInterval - 1;
-        //arTargetPosition[1] = ThisPieceTileNumber + nUpInterval + 1;
-        //arTargetPosition[2] = ThisPieceTileNumber + nDownInterval - 1;
-        //arTargetPosition[3] = ThisPieceTileNumber + nDownInterval + 1;
-        //arTargetPosition[4] = ThisPieceTileNumber + nRightInterval + 8;
-        //arTargetPosition[5] = ThisPieceTileNumber + nRightInterval - 8;
-        //arTargetPosition[6] = ThisPieceTileNumber + nLeftInterval + 8;
-        //arTargetPosition[7] = ThisPieceTileNumber + nLeftInterval - 8;
+        }
+        else if (nDownSideLimit < 0)
+        {
+            arSecondStepTargetPosition[2] = -1;
+            arSecondStepTargetPosition[3] = -1;
+        }
+
+        if(nRightSideLimit < 8)
+        {
+            arFirstStepTargetPosition[4] = ThisPieceTileNumber + nRightInterval;
+            int nNextStepPosition = arFirstStepTargetPosition[4] + 8;
+            if(nNextStepPosition < 64)
+            {
+                arSecondStepTargetPosition[4] = arFirstStepTargetPosition[4] + 8;
+            }
+            else
+            {
+                arSecondStepTargetPosition[4] = -1;
+            }
+
+            arFirstStepTargetPosition[5] = ThisPieceTileNumber + nRightInterval;
+            nNextStepPosition = arFirstStepTargetPosition[5] - 8;
+            if (nNextStepPosition >= 0)
+            {
+                arSecondStepTargetPosition[5] = arFirstStepTargetPosition[5] - 8;
+            }
+            else
+            {
+                arSecondStepTargetPosition[5] = -1;
+            }
+
+        }
+        else if(nRightSideLimit >= 8)
+        {
+            arSecondStepTargetPosition[4] = -1;
+            arSecondStepTargetPosition[5] = -1;
+        }
+
+        if (nLeftSideLimit >= 0)
+        {
+            arFirstStepTargetPosition[6] = ThisPieceTileNumber + nLeftInterval;
+            int nNextStepPosition = arFirstStepTargetPosition[6] + 8;
+            if (nNextStepPosition < 64)
+            {
+                arSecondStepTargetPosition[6] = arFirstStepTargetPosition[6] + 8;
+            }
+            else
+            {
+                arSecondStepTargetPosition[6] = -1;
+            }
+
+            arFirstStepTargetPosition[7] = ThisPieceTileNumber + nLeftInterval;
+            nNextStepPosition = arFirstStepTargetPosition[7] - 8;
+            if (nNextStepPosition >= 0)
+            {
+                arSecondStepTargetPosition[7] = arFirstStepTargetPosition[7] - 8;
+            }
+            else
+            {
+                arSecondStepTargetPosition[7] = -1;
+            }
+
+        }
+        else if (nLeftSideLimit < 0)
+        {
+            arSecondStepTargetPosition[6] = -1;
+            arSecondStepTargetPosition[7] = -1;
+        }
+
 
         int nPossibleTargetPosition = 0;
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < nMaxMovePointCount; i++)
         {
             if(arSecondStepTargetPosition[i] >=0 && arSecondStepTargetPosition[i] < 64)
             {
@@ -569,25 +649,16 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Possible target pos : " + nPossibleTargetPosition);
 
-        GameObject[] MovablePoint = new GameObject[2];
+        GameObject[] MovablePoint = new GameObject[nMaxMovePointCount];
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < nMaxMovePointCount; i++)
         {
-            //if(arTargetPosition[i] >= 0 && arTargetPosition[i] < 64)
-            //{
-
-            //}
 
             MovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
             createdMovablePoint.Add(MovablePoint[i]);
 
-
-            //nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber + (nUpInterval * i) + nUpInterval;
             nTargetTileNumber = arSecondStepTargetPosition[i];
 
-            //nRemainderDividedByEight = ThisPieceTileNumber % 8;
-            //int nExpectedRightPos = nRemainderDividedByEight + nRightInterval;
-            int nExpectedRightPos = 0;
 
             if (nTargetTileNumber < 64 && nTargetTileNumber >= 0)
             {
@@ -610,6 +681,50 @@ public class GameManager : MonoBehaviour
 
     void MakeMovePoint_Bishop(int nTargetTileNumber, Vector3 posParentPosition)
     {
+        int nThisPieceTileNumber;
+        nThisPieceTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber;
+
+        int nCurrentPieceTileNumber = 0;
+        nCurrentPieceTileNumber = nThisPieceTileNumber;
+
+        int nNextNumber = 0;
+        nNextNumber = nCurrentPieceTileNumber + 8;
+
+        int nRemainder = 0;
+        nRemainder = (nCurrentPieceTileNumber - 1) % 8;
+
+        int nBishopMovePointCount = 0;
+
+        while(nRemainder != 7 && nNextNumber < 64)
+        {
+            nBishopMovePointCount++;
+            nCurrentPieceTileNumber = (nCurrentPieceTileNumber - 1) + 8;
+            nRemainder = (nCurrentPieceTileNumber - 1) % 8;
+            nNextNumber = nCurrentPieceTileNumber + 8;
+
+            Debug.Log("nCurrentPieceTileNumber : " + nCurrentPieceTileNumber);
+        }
+
+        Debug.Log("Left Up Movable point count : " + nBishopMovePointCount);
+
+        GameObject[] LeftUpMovablePoint = new GameObject[nBishopMovePointCount];
+
+        int nUpInterval = 8;
+        int nLeftInterval = -1;
+
+        nTargetTileNumber = CurrentSelectedPiece.GetComponent<ChessPiece>().nCurrentTileNumber;
+
+        for (int i = 0; i < nBishopMovePointCount; i++)
+        {
+            LeftUpMovablePoint[i] = Instantiate(chessPieceMovablePointPrefab);
+            createdMovablePoint.Add(LeftUpMovablePoint[i]);
+
+            nTargetTileNumber = nTargetTileNumber + nUpInterval + nLeftInterval;
+            LeftUpMovablePoint[i].transform.SetParent(chessBoardTile[nTargetTileNumber].transform);
+            LeftUpMovablePoint[i].GetComponent<RectTransform>().localPosition = posParentPosition;
+
+        }
+
 
     }
 
