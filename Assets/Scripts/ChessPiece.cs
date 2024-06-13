@@ -17,11 +17,15 @@ public class ChessPiece : MonoBehaviour
     }
 
     public MyPieceTypes currentPieceType;
+    
+    // 1 = white , 2 = black
     public int nOwnPlayerNumber = 0;
+    
     public GameObject currentGameManagerObject;
     public GameManager currentGameManager;
     public int nCurrentTileNumber;
     //bool isSelected;
+    //public bool isWhite;
 
     // Start is called before the first frame update
     void Start()
